@@ -234,7 +234,7 @@ export async function fireEngineCheckStatus(
       status,
       jobId,
     });
-    throw new Error(
+    const error = new Error(
       "Check status returned response not matched by any schema",
       {
         cause: {
@@ -243,5 +243,7 @@ export async function fireEngineCheckStatus(
         },
       },
     );
+    Sentry.captureException(error);
+    throw error;
   }
 }
