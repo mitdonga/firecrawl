@@ -95,9 +95,11 @@ async function performFireEngineScrape<
           ).catch(e => {
             logger.error("Failed to delete job from Fire Engine", { error: e });
           });
-          throw new Error("Error limit hit. See e.cause.errors for errors.", {
+          const error = new Error("Error limit hit. See e.cause.errors for errors.", {
             cause: { errors },
           });
+          Sentry.captureException(error);
+          throw error;
         }
 
         meta.abort.throwIfAborted();

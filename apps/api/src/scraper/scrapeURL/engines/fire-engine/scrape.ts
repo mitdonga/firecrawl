@@ -286,7 +286,7 @@ export async function fireEngineScrape<
     logger.debug("Scrape returned response not matched by any schema", {
       status,
     });
-    throw new Error(
+    const error = new Error(
       "Check status returned response not matched by any schema",
       {
         cause: {
@@ -294,5 +294,7 @@ export async function fireEngineScrape<
         },
       },
     );
+    Sentry.captureException(error);
+    throw error;
   }
 }
